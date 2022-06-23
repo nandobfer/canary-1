@@ -6683,7 +6683,7 @@ void ProtocolGame::openImbuementWindow(Item *item)
 	}
 
 	std::vector<Imbuement *> imbuements = g_imbuements().getImbuements(player, item);
-	std::unordered_map<uint16_t, uint16_t> needItems;
+	phmap::flat_hash_map<uint16_t, uint16_t> needItems;
 
 	msg.add<uint16_t>(imbuements.size());
 	for (const Imbuement *imbuement : imbuements)

@@ -298,6 +298,7 @@ target_sources(${PROJECT_NAME}
     server/server.cpp
     server/signals.cpp
     utils/tools.cpp
+    utils/parallel_hashmap/phmap.h
     utils/wildcardtree.cpp
 )
 

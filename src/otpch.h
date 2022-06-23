@@ -13,6 +13,7 @@
 // Definitions should be global.
 #include "utils/definitions.h"
 #include "utils/simd.hpp"
+#include "utils/parallel_hashmap/phmap.h"
 
 #include <algorithm>
 #include <chrono>
