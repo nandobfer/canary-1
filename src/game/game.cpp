@@ -7694,39 +7694,24 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t ite
 		}
 		else
 		{
-			uint16_t stashmath;
-			uint16_t stashminus = player->getStashItemCount(it.wareId);
-			stashmath = (amount - (amount > stashminus ? stashminus : amount));
-			std::vector<Item*> itemVector = getMarketItemList(it.wareId, stashmath, depotLocker);
-			if (itemVector.empty() && stashmath > 0)
-			{
+			std::vector<Item*> itemVector = getMarketItemList(it.wareId, amount, depotLocker);
+			if (itemVector.empty()) {
 				SPDLOG_ERROR("[Game::playerCreateMarketOffer] - Sell item list is empty for player {}", player->getName());
 				return;
 			}
 
-			if (stashminus > 0)
-			{
-				player->withdrawItem(it.wareId, (amount > stashminus ? stashminus : amount));
-			}
-
-			if (it.stackable)
-			{
-				uint16_t tmpAmount = stashmath;
-				for (Item *item: itemVector)
-				{
-					uint16_t removeCount = std::min<uint16_t> (tmpAmount, item->getItemCount());
+			if (it.stackable) {
+				uint16_t tmpAmount = amount;
+				for (Item* item : itemVector) {
+					uint16_t removeCount = std::min<uint16_t>(tmpAmount, item->getItemCount());
 					tmpAmount -= removeCount;
 					internalRemoveItem(item, removeCount);
-					if (tmpAmount == 0)
-					{
+					if (tmpAmount == 0) {
 						break;
 					}
 				}
-			}
-			else
-			{
-				for (Item *item: itemVector)
-				{
+			} else {
+				for (Item* item : itemVector) {
 					internalRemoveItem(item);
 				}
 			}
@@ -8560,7 +8545,7 @@ std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientC
 	std::vector<Container*> containers{ depotLocker };
 	containers.reserve(32);
 
-	uint16_t count = 0;
+	uint32_t count = 0;
 	size_t i = 0;
 	do {
 		Container* container = containers[i];
