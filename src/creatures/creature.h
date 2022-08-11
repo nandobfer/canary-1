@@ -177,10 +177,10 @@ class Creature : virtual public Thing
 		int64_t getEventStepTicks(bool onlyDelay = false) const;
 		int64_t getStepDuration(Direction dir) const;
 		int64_t getStepDuration() const;
-		virtual int32_t getStepSpeed() const {
+		virtual uint16_t getStepSpeed() const {
 			return getSpeed();
 		}
-		int32_t getSpeed() const {
+		uint16_t getSpeed() const {
 			return baseSpeed + varSpeed;
 		}
 		void setSpeed(int32_t varSpeedDelta) {
@@ -198,7 +198,7 @@ class Creature : virtual public Thing
 		void setBaseSpeed(uint32_t newBaseSpeed) {
 			baseSpeed = newBaseSpeed;
 		}
-		uint32_t getBaseSpeed() const {
+		uint16_t getBaseSpeed() const {
 			return baseSpeed;
 		}
 
