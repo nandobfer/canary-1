@@ -1,18 +1,17 @@
 -- Core API functions implemented in Lua
-dofile('data/lib/core/load.lua')
-dofile('data/lib/core/functions/load.lua')
+dofile('data/lib/core/core.lua')
+
+-- Compatibility library for our old Lua API
+dofile('data/lib/compat/compat.lua')
 
 -- Debugging helper function for Lua developers
 dofile('data/lib/debugging/dump.lua')
 
 -- Tables library
-dofile('data/lib/tables/load.lua')
+dofile('data/lib/tables/table.lua')
 
--- Daily reward library
-dofile('data/lib/daily_reward/daily_reward.lua')
-dofile('data/lib/daily_reward/player.lua')
+-- Others library
+dofile('data/lib/others/others.lua')
 
--- Reward boss library
-dofile('data/lib/reward_boss/reward_boss.lua')
-dofile('data/lib/reward_boss/player.lua')
-dofile('data/lib/reward_boss/monster.lua')
+-- Quests library
+dofile('data/lib/quests/quest.lua')

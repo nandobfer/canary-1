@@ -11,9 +11,9 @@ function familiarOnLogin.onLogin(player)
 	local familiarTimeLeft = player:getStorageValue(Storage.FamiliarSummon) - player:getLastLogout()
 
 	if vocation then
-		if (not player:isPremium() and player:hasFamiliar(vocation.id)) or player:getLevel() < 200 then
+		if (not isPremium(player) and player:hasFamiliar(vocation.id)) or player:getLevel() < 200 then
 			player:removeFamiliar(vocation.id)
-		elseif player:isPremium() and player:getLevel() >= 200 then
+		elseif isPremium(player) and player:getLevel() >= 200 then
 			if familiarTimeLeft > 0 then
 				familiarName = vocation.name
 			end
@@ -42,8 +42,20 @@ function familiarOnLogin.onLogin(player)
 			addEvent(RemoveFamiliar, familiarTimeLeft*1000, familiarMonster:getId(), player:getId())
 
 			for sendMessage = 1, #FAMILIAR_TIMER do
-				if player:getStorageValue(FAMILIAR_TIMER[sendMessage].storage) == -1 and familiarTimeLeft >= FAMILIAR_TIMER[sendMessage].countdown then
-					player:setStorageValue(FAMILIAR_TIMER[sendMessage].storage, addEvent(SendMessageFunction, (familiarTimeLeft-FAMILIAR_TIMER[sendMessage].countdown)*1000, player:getId(), FAMILIAR_TIMER[sendMessage].message))
+				if player:getStorageValue(FAMILIAR_TIMER[sendMessage].storage) == -1
+				and familiarTimeLeft >= FAMILIAR_TIMER[sendMessage].countdown then
+					player:setStorageValue(
+						-- Storage key param
+						FAMILIAR_TIMER[sendMessage].storage,
+						-- Storage value param start
+						addEvent(
+							SendMessageFunction,
+							(familiarTimeLeft-FAMILIAR_TIMER[sendMessage].countdown) * 1000,
+							player:getId(),
+							FAMILIAR_TIMER[sendMessage].message
+						)
+						-- Storage value param end
+					)
 				end
 			end
 		end

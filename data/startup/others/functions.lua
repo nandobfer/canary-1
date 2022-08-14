@@ -1,3 +1,20 @@
+-- This function load the table "CreateItemOnMap"from script "create_item.lua"
+-- Basically it works to create items on the map without the need to edit the map
+function CreateMapItem(tablename)
+	for index, value in pairs(tablename) do
+		for i = 1, #value.itemPos do
+			local tile = Tile(value.itemPos[i])
+			-- Checks if the position is valid
+			if tile then
+				if tile:getItemCountById(index) == 0 then
+					Game.createItem(index, 1, value.itemPos[i])
+				end
+			end
+		end
+	end
+	Spdlog.info("Created all items in the map")
+end
+
 -- These functions load the action/unique tables on the map
 function loadLuaMapAction(tablename)
 	-- It load actions
@@ -8,14 +25,16 @@ function loadLuaMapAction(tablename)
 			-- Checks if the position is valid
 			if tile then
 				-- Checks that you have no items created
-				if tile:getItemCountById(value.itemId) == 0 then
+				if not value.itemId == false and tile:getItemCountById(value.itemId) == 0 then
 					Spdlog.warn("[loadLuaMapAction] - Wrong item id found")
-					Spdlog.warn(string.format("Action id: %d, item id: %d",
-						index, value.itemId))
+					Spdlog.warn(string.format("Action id: %d, item id: %d", index, value.itemId))
+					break
 				end
-				if tile:getItemCountById(value.itemId) == 1 then
+
+				if value.itemId ~= false and tile:getItemCountById(value.itemId) > 0 then
 					item = tile:getItemById(value.itemId)
 				end
+				
 				-- If he found the item, add the action id.
 				if item and value.itemId ~= false then
 					item:setAttribute(ITEM_ATTRIBUTE_ACTIONID, index)
@@ -28,13 +47,6 @@ function loadLuaMapAction(tablename)
 				end
 				if value.itemId == false and tile:getGround() then
 					tile:getGround():setAttribute(ITEM_ATTRIBUTE_ACTIONID, index)
-				end
-				if value.isDailyReward then
-					if item:isContainer() then
-						if item:getSize() > 0 then
-							item:getItem():setAttribute(ITEM_ATTRIBUTE_ACTIONID, index)
-						end
-					end
 				end
 			end
 		end
@@ -49,13 +61,17 @@ function loadLuaMapUnique(tablename)
 		-- Checks if the position is valid
 		if tile then
 			-- Checks that you have no items created
-			if tile:getItemCountById(value.itemId) == 0 then
+			if not value.itemId == false and tile:getItemCountById(value.itemId) == 0 then
 				Spdlog.warn("[loadLuaMapUnique] - Wrong item id found")
 				Spdlog.warn("Unique id: ".. index ..", item id: ".. value.itemId .."")
+				break
 			end
-			if tile:getItemCountById(value.itemId) == 1 then
-				item = tile:getItemById(value.itemId)
+			if tile:getItemCountById(value.itemId) < 1 or value.itemId == false then
+				Spdlog.warn("[loadLuaMapUnique] - Wrong item id found")
+				Spdlog.warn("Unique id: ".. index ..", item id: wrong")
+				break
 			end
+			item = tile:getItemById(value.itemId)
 			-- If he found the item, add the unique id
 			if item then
 				item:setAttribute(ITEM_ATTRIBUTE_UNIQUEID, index)
@@ -75,6 +91,7 @@ function loadLuaMapSign(tablename)
 			if tile:getItemCountById(value.itemId) == 0 then
 				Spdlog.warn("[loadLuaMapSign] - Wrong item id found")
 				Spdlog.warn("Sign id: ".. index ..", item id: ".. value.itemId .."")
+				break
 			end
 			if tile:getItemCountById(value.itemId) == 1 then
 				item = tile:getItemById(value.itemId)
@@ -120,12 +137,15 @@ function loadLuaMapBookDocument(tablename)
 						totals[2] = totals[2] + 1
 					else
 						Spdlog.warn("[loadLuaMapBookDocument] - Item not found! Index: ".. index ..", itemId: ".. value.itemId.."")
+						break
 					end
 				else
 					Spdlog.warn("[loadLuaMapBookDocument] - Container not found! Index: ".. index ..", containerId: ".. value.containerId.."")
+					break
 				end
 			else
 				Spdlog.warn("[loadLuaMapBookDocument] - Tile not found! Index: ".. index ..", position: x: ".. value.position.x.." y: ".. value.position.y .." z: ".. value.position.z .."")
+				break
 			end
 		end
 	end
@@ -134,4 +154,25 @@ function loadLuaMapBookDocument(tablename)
 	else
 		Spdlog.info("Loaded ".. totals[2] .." of ".. totals[1] .." books and documents in the map")
 	end
+end
+
+function updateKeysStorage(tablename)
+	-- It updates old storage keys from quests for all players
+	local newUpdate = tablename[0].latest
+	local oldUpdate = getGlobalStorage(GlobalStorage.KeysUpdate)
+	if newUpdate <= oldUpdate then
+		return true
+	end
+
+	Spdlog.info("Updating quest keys storages...")
+	if oldUpdate < 1 then
+		oldUpdate = 1
+	end
+	for u = oldUpdate, newUpdate do
+		for i = 1, #tablename[u] do
+			db.query("UPDATE `player_storage` SET `key` = '" .. tablename[u][i].new .. "' WHERE `key` = '" .. tablename[u][i].old .. "';")
+		end
+	end
+	setGlobalStorage(GlobalStorage.KeysUpdate, newUpdate)
+	Spdlog.info("Storage Keys Updated")
 end

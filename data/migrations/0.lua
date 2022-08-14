@@ -1,53 +1,14 @@
 function onUpdateDatabase()
-	Spdlog.info("Updating database to version 19 (Prey system rework + Task hunting system)")
-	db.query([[
-		ALTER TABLE `players`
-			DROP `prey_stamina_1`,
-			DROP `prey_stamina_2`,
-			DROP `prey_stamina_3`,
-			DROP `prey_column`,
-			ADD `prey_wildcard` bigint(21) NOT NULL DEFAULT 0,
-			ADD `task_points` bigint(21) NOT NULL DEFAULT 0;
-	]])
-
-	db.query([[
-		DROP TABLE `player_prey`;
-	]])
-
-	db.query([[
-		DROP TABLE `prey_slots`;
-	]])
-
-	db.query([[
-		CREATE TABLE IF NOT EXISTS `player_taskhunt` (
-			`player_id` int(11) NOT NULL,
-			`slot` tinyint(1) NOT NULL,
-			`state` tinyint(1) NOT NULL,
-			`raceid` varchar(250) NOT NULL,
-			`upgrade` tinyint(1) NOT NULL,
-			`rarity` tinyint(1) NOT NULL,
-			`kills` varchar(250) NOT NULL,
-			`disabled_time` bigint(20) NOT NULL,
-			`free_reroll` bigint(20) NOT NULL,
-			`monster_list` BLOB NULL
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-	]])
-
-	db.query([[
-		CREATE TABLE IF NOT EXISTS `player_prey` (
-			`player_id` int(11) NOT NULL,
-			`slot` tinyint(1) NOT NULL,
-			`state` tinyint(1) NOT NULL,
-			`raceid` varchar(250) NOT NULL,
-			`option` tinyint(1) NOT NULL,
-			`bonus_type` tinyint(1) NOT NULL,
-			`bonus_rarity` tinyint(1) NOT NULL,
-			`bonus_percentage` varchar(250) NOT NULL,
-			`bonus_time` varchar(250) NOT NULL,
-			`free_reroll` bigint(20) NOT NULL,
-			`monster_list` BLOB NULL
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-	]])
-
+	Spdlog.info("Updating database to version 1 (sample players)")
+	-- Rook Sample
+	db.query("UPDATE `players` SET `level` = 2, `vocation` = 0, `health` = 155, `healthmax` = 155, `experience` = 100, `soul` = 100, `lookbody` = 113, `lookfeet` = 115, `lookhead` = 95, `looklegs` = 39, `looktype` = 129, `mana` = 60, `manamax` = 60, `town_id` = 1, `cap` = 410 WHERE `id` = 1;")
+	-- Sorcerer Sample
+	db.query("UPDATE `players` SET `level` = 8, `vocation` = 1, `health` = 185, `healthmax` = 185, `experience` = 4200, `soul` = 100, `lookbody` = 113, `lookfeet` = 115, `lookhead` = 95, `looklegs` = 39, `looktype` = 129, `mana` = 90, `manamax` = 90, `town_id` = 8, `cap` = 470 WHERE `id` = 2;")
+	-- Druid Sample
+	db.query("UPDATE `players` SET `level` = 8, `vocation` = 2, `health` = 185, `healthmax` = 185, `experience` = 4200, `soul` = 100, `lookbody` = 113, `lookfeet` = 115, `lookhead` = 95, `looklegs` = 39, `looktype` = 129, `mana` = 90, `manamax` = 90, `town_id` = 8, `cap` = 470 WHERE `id` = 3;")
+	-- Paladin Sample
+	db.query("UPDATE `players` SET `level` = 8, `vocation` = 3, `health` = 185, `healthmax` = 185, `experience` = 4200, `soul` = 100, `lookbody` = 113, `lookfeet` = 115, `lookhead` = 95, `looklegs` = 39, `looktype` = 129, `mana` = 90, `manamax` = 90, `town_id` = 8, `cap` = 470 WHERE `id` = 4;")
+	-- Knight Sample
+	db.query("UPDATE `players` SET `level` = 8, `vocation` = 4, `health` = 185, `healthmax` = 185, `experience` = 4200, `soul` = 100, `lookbody` = 113, `lookfeet` = 115, `lookhead` = 95, `looklegs` = 39, `looktype` = 129, `mana` = 90, `manamax` = 90, `town_id` = 8, `cap` = 470 WHERE `id` = 5;")
 	return true
 end
