@@ -1,7 +1,7 @@
 local spell = Spell("instant")
 
 function spell.onCastSpell(creature, variant)
-	return creature:conjureItem(3147, 3200, 6)
+	return creature:conjureItem(2260, 2313, 6)
 end
 
 spell:name("Explosion Rune")
@@ -15,4 +15,4 @@ spell:mana(570)
 spell:soul(4)
 spell:isAggressive(false)
 spell:needLearn(false)
-spell:register()
+--spell:register()

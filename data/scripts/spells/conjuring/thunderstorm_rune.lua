@@ -1,7 +1,7 @@
 local spell = Spell("instant")
 
 function spell.onCastSpell(creature, variant)
-	return creature:conjureItem(3147, 3202, 4)
+	return creature:conjureItem(2260, 2315, 4)
 end
 
 spell:name("Thunderstorm Rune")
@@ -16,4 +16,4 @@ spell:soul(3)
 spell:isAggressive(false)
 spell:isPremium(true)
 spell:needLearn(false)
-spell:register()
+--spell:register()

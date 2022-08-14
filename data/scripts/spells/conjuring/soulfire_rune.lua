@@ -1,7 +1,7 @@
 local spell = Spell("instant")
 
 function spell.onCastSpell(creature, variant)
-	return creature:conjureItem(3147, 3195, 3)
+	return creature:conjureItem(2260, 2308, 3)
 end
 
 spell:name("Soulfire Rune")
@@ -16,4 +16,4 @@ spell:soul(3)
 spell:isAggressive(false)
 spell:isPremium(true)
 spell:needLearn(false)
-spell:register()
+--spell:register()

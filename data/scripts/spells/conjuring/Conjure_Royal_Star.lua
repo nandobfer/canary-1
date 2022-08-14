@@ -1,7 +1,7 @@
 local spell = Spell("instant")
 
 function spell.onCastSpell(creature, variant)
-	return creature:conjureItem(0, 25759, 30, CONST_ME_MAGIC_BLUE)
+	return creature:conjureItem(0, 29059, 30, CONST_ME_MAGIC_BLUE)
 end
 
 spell:group("support")
@@ -18,4 +18,4 @@ spell:isSelfTarget(true)
 spell:isAggressive(false)
 spell:vocation("paladin;true", "royal paladin;true")
 spell:needLearn(false)
-spell:register()
+--spell:register()

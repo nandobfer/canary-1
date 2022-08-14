@@ -1,7 +1,7 @@
 local spell = Spell("instant")
 
 function spell.onCastSpell(creature, variant)
-	return creature:conjureItem(3147, 3203, 1)
+	return creature:conjureItem(2260, 2316, 1)
 end
 
 spell:name("Animate Dead Rune")
@@ -16,4 +16,4 @@ spell:soul(5)
 spell:isAggressive(false)
 spell:isPremium(true)
 spell:needLearn(false)
-spell:register()
+--spell:register()

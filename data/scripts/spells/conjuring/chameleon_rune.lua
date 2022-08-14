@@ -1,7 +1,7 @@
 local spell = Spell("instant")
 
 function spell.onCastSpell(creature, variant)
-	return creature:conjureItem(3147, 3178, 1)
+	return creature:conjureItem(2260, 2291, 1)
 end
 
 spell:name("Chameleon Rune")
@@ -15,4 +15,4 @@ spell:mana(600)
 spell:soul(2)
 spell:isAggressive(false)
 spell:needLearn(false)
-spell:register()
+--spell:register()
