@@ -36,8 +36,8 @@ bool IOLoginData::authenticateAccountPassword(const std::string& email, const st
 
 	std::string accountPassword;
 	account->GetPassword(&accountPassword);
-	if (transformToSHA1(password) != accountPassword) {
-			SPDLOG_ERROR("Password '{}' doesn't match any account", transformToSHA1(password));
+	if (password != accountPassword) {
+			SPDLOG_ERROR("Password '{}' doesn't match any account", password);
 			return false;
 	}
 
