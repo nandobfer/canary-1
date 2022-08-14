@@ -237,6 +237,15 @@ function playerLogin.onLogin(player)
 		onExerciseTraining[player:getId()] = nil
 		player:setTraining(false)
 	end
+
+    -- MOONLIGHT CUSTOM /
+    player:setBaseCritical()
+        
+    player:setStorageValue(Storage_.leveledup, 1)
+
+    playerStartUp(player)
+    -- \ MOONLIGHT CUSTOMS
+
 	return true
 end
 playerLogin:register()
