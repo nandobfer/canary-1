@@ -9,12 +9,11 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
     # redirecting to another endpoint
-    # return redirect(url_for('home'))
 
 
-@app.route('/home/', methods=['GET'])
-def home():
-    return render_template('home.html')
+# @app.route('/home/', methods=['GET'])
+# def home():
+#     return redirect(url_for(''))
 
 
 @app.route('/login.php', methods=['GET', 'POST'])
@@ -23,5 +22,5 @@ def login_php():
     return out.stdout
 
 
-if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port="80")
+def run(port=80):
+    app.run(debug=True, host="0.0.0.0", port=port, use_reloader=False)
