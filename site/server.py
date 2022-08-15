@@ -1,6 +1,6 @@
-from crypt import methods
 from flask import Flask, request, url_for, redirect, render_template, request
 import subprocess
+import sys
 
 app = Flask(__name__)
 
@@ -22,5 +22,13 @@ def login_php():
     return out.stdout
 
 
-def run(port=80):
-    app.run(debug=True, host="0.0.0.0", port=port, use_reloader=False)
+def run():
+
+    if len(sys.argv) > 1:
+        app.run(debug=True, host="0.0.0.0",
+                port=sys.argv[1], use_reloader=False)
+    else:
+        app.run(debug=True, host="0.0.0.0", port="80")
+
+
+run()
