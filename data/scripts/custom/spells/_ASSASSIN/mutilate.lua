@@ -34,7 +34,7 @@ end
 spell:group("attack")
 spell:id(59)
 spell:name("Mutilate")
-spell:words("exori min")
+spell:words("exori sin")
 spell:level(8)
 spell:mana(20)
 spell:range(1)
