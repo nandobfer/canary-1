@@ -51,10 +51,10 @@ function Player:setRaceSkin()
         [1] = {
             [0] = "elf",
             [1] = "elf arcanist",
-            [2] = "elf overseer",
+            [2] = "elf",
             [3] = "elf",
             [4] = "elf",
-            [9] = "elf overseer",
+            [9] = "elf",
             [10] = "elf arcanist",
             [11] = "elf scout",
         },

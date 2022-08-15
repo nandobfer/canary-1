@@ -25,7 +25,7 @@ function changeRace.onSay(player, words, param)
 	split[2] = split[2]:gsub("^%s*(.-)$", "%1")
 
 	local race = split[2]
-	player:setStorageValue(Storage_.race, race)
+	target:setStorageValue(Storage_.race, race)
     doPlayerSendTextMessage(player:getId(), MESSAGE_EVENT_ADVANCE, "Race of " .. target:getName() .. " changed to " .. race .. "")
 	return false
 end
