@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <script type="text/javascript" src="/static/brython/brython.js"></script>
+    <script type="text/javascript" src="/static/brython/brython_stdlib.js"></script>
+    <title>Sbop - Perfil</title>
+</head>
+
+<body onload="brython()">
+    <!-- TOP TOOLBAR -->
+    <div id="loading-screen">
+        <h1>CARREGANDO</h1>
+    </div>
+    <div class="body-container">
+        <div class="body-toolbar">
+            <div class="toolbar toolbar-active" id="toolbar-home">
+                <h1>Início</h1>
+                <p>Informações sobre o jogo</p>
+            </div>
+            <hr>
+            <div class="toolbar" id="toolbar-account">
+                <h1>Conta</h1>
+                <p>Criar ou gerenciar sua conta</p>
+            </div>
+            <hr>
+            <div class="toolbar" id="toolbar-download">
+                <h1>Download</h1>
+                <p>Baixar e conectar</p>
+            </div>
+            <hr>
+            <div class="toolbar" id="toolbar-library">
+                <h1>Biblioteca</h1>
+                <p>Detalhes sobre o conteúdo novo</p>
+            </div>
+            <hr>
+            <div class="toolbar" id="toolbar-team">
+                <h1>Equipe</h1>
+                <p>Contato e créditos</p>
+            </div>
+        </div>
+        <!-- Floating Popup -->
+        <div id="floating-popup">
+            <h1>TESTE TESTE</h1>
+            <p></p>
+            <button>OK</button>
+        </div>
+
+        <!-- INICIO CONTAINER -->
+        <div class="main-container" id="home-container">
+            <div>
+                <h2>Escolha uma raça e domine duas classes (?)</h2>
+                <p>Os humanóides já saem do primeiro treinamento com uma classe, mas podem dominar uma segunda caso se
+                    dediquem o suficiente.</p>
+                <img src="../static/images/home/humanoids.webp" alt="Humanoides">
+                <p>Cada raça possui habilidades únicas, concendo vantagens específicas</p>
+            </div>
+            <div class="moonlight-wolf">
+                <img src="../static/images/moonlight_wolf.png" alt="Moonlight">
+                <h1>Moonlight</h1>
+            </div>
+            <div>
+                <h2>Viva como um monstro e evolua</h2>
+                <p>Se alimente de outras criaturas para evoluir, aprimorando
+                    seus atributos, modificando sua aparência e ganhando novas habilidades com base na evolução
+                    escolhida.</p>
+                <img src="../static/images/home/monster.webp" alt="Monstros">
+                <p>Como monstro você deve sobreviver em um ambiente hostil desde o início.</p>
+            </div>
+        </div>
+        <!-- CONTA CONTAINER -->
+        <div class="main-container" id="account-container">
+            <h1>CONTA</h1>
+        </div>
+        <!-- DOWNLOAD CONTAINER -->
+        <div class="main-container" id="download-container">
+            <h1>DOWNLOAD</h1>
+        </div>
+        <!-- BIBLIOTECA CONTAINER -->
+        <div class="main-container" id="library-container">
+            <h1>BIBLIOTECA</h1>
+        </div>
+        <!-- EQUIPE CONTAINER -->
+        <div class="main-container" id="team-container">
+            <h1>EQUIPE</h1>
+        </div>
+
+    </div>
+</body>
+<footer>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/python" src="/static/brython/toolbar.py"></script>
+    <script type="text/python" src="/static/brython/home.py"></script>
+</footer>
+
+</html>

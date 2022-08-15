@@ -7,8 +7,9 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    return render_template('index.html')
     # redirecting to another endpoint
-    return redirect(url_for('home'))
+    # return redirect(url_for('home'))
 
 
 @app.route('/home/', methods=['GET'])
