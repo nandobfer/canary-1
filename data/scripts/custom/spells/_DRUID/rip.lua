@@ -45,7 +45,7 @@ function spell.onCastSpell(creature, var)
 end
 
 spell:group("attack")
-spell:id(59)
+spell:id(590)
 spell:name("Rip")
 spell:words("exori moe rip")
 spell:level(30)
