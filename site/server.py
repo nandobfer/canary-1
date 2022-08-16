@@ -80,16 +80,16 @@ class Mysql():
         cursor.close()
         return data
 
-    def insertMember(self, data):
+    def newAccount(self, data):
         ''' Função utilizada para inserir novo membro no banco de dados.
         DATA requer (ID, USUÁRIO, SENHA, NOME, ENDEREÇO, TIPO DE MEMBRO) '''
 
         try:
-            sql = f"INSERT INTO Membros (ID, USUÁRIO, SENHA, NOME, UF, MEMBRO, CEP, EMAIL, TELEFONE, CELULAR, ENDERECO, NUMERO, COMPLEMENTO, BAIRRO, CIDADE, PAIS, CRM, CURRICULUM, PESSOA) VALUES ({data['id']}, '{data['usuario']}', '{data['senha']}', '{data['nome']}', '{data['uf']}', '{data['membro']}', '{data['cep']}', '{data['email']}', '{data['telefone']}', '{data['celular']}', '{data['endereco']}', '{data['numero']}', '{data['complemento']}', '{data['bairro']}', '{data['cidade']}', '{data['pais']}', '{data['crm']}', '{data['curriculum']}', '{data['pessoa']}')"
+            sql = f"INSERT INTO accounts (id, name, password, email, premdays, lastday, type, coins, creation, recruiter) VALUES ({data['id']}, 'none', '{data['password']}', '{data['email']}', '0', '0', '1', '0', '0', '0')"
             cursor = self.connection.cursor()
             cursor.execute(sql)
         except:
-            sql = f'INSERT INTO Membros (ID, USUÁRIO, SENHA, NOME, UF, MEMBRO, CEP, EMAIL, TELEFONE, CELULAR, ENDERECO, NUMERO, COMPLEMENTO, BAIRRO, CIDADE, PAIS, CRM, CURRICULUM, PESSOA) VALUES ({data["id"]}, "{data["usuario"]}", "{data["senha"]}", "{data["nome"]}", "{data["uf"]}", "{data["membro"]}", "{data["cep"]}", "{data["email"]}", "{data["telefone"]}", "{data["celular"]}", "{data["endereco"]}", "{data["numero"]}", "{data["complemento"]}", "{data["bairro"]}", "{data["cidade"]}", "{data["pais"]}", "{data["crm"]}", "{data["curriculum"]}", "{data["pessoa"]}")'
+            sql = f'INSERT INTO accounts (id, name, password, email, premdays, lastday, type, coins, creation, recruiter) VALUES ({data["id"]}, "none", "{data["password"]}", "{data["email"]}", "0", "0", "1", "0", "0", "0")'
             cursor = self.connection.cursor()
             cursor.execute(sql)
 
@@ -214,18 +214,13 @@ class Session():
     def signup(self, data):
         try:
             usuario = self.database.fetchTable(
-                1, 'Membros', 'USUÁRIO', data['usuario'])[0]
+                1, 'accounts', 'email', data['email'])[0]
             if usuario:
                 return 'Usuário já cadastrado', False
 
-            email = self.database.fetchTable(
-                1, 'Membros', 'EMAIL', data['email'])[0]
-            if email:
-                return 'E-mail já cadastrado', False
-
         except:
-            data.update({'id': len(self.member_list)})
-            self.database.insertMember(data)
+            data.update({'id': len(self.member_list)+1})
+            self.database.newAccount(data)
             self.member_list.append(data)
             return 'Usuário cadastrado', True
 
@@ -260,6 +255,18 @@ def login():
     if connection:
         data = vars(connection)
         return data
+    else:
+        return 'None'
+
+
+@app.route('/signup/', methods=['POST'])
+def signup():
+    ip = request.remote_addr
+    email = request.form['email']
+    password = request.form['password']
+    response = session.signup({'email': email, 'password': password})
+    if response[1]:
+        return str(['Sucesso', 'Usuário cadastrado'])
     else:
         return 'None'
 

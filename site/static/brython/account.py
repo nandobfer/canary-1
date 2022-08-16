@@ -10,6 +10,8 @@ login_email = jQuery('#login-email')
 login_password = jQuery('#login-password')
 login_form_text = jQuery('#login-form > p')
 
+signup_email = jQuery('#signup-email')
+signup_password = jQuery('#signup-password')
 
 class User():
     def __init__(self, data):
@@ -133,6 +135,25 @@ def renderCharacter(ev):
     jQuery('.new-character-container').fadeOut(jQuery('.character-container').fadeIn)
 
 
+def sendSignUp(ev):
+    data = {
+        'email': signup_email.val(),
+        'password': signup_password.val()
+    }
+
+    def signupComplete(req):
+        response = eval(req.text)
+        toggleContainer('blur')
+        POPUP.fadeToggle()
+        if response:
+            POPUP.find('h1').text(response[0])
+            POPUP.find('p').text(response[1])
+        else:
+            POPUP.find('h1').text('Erro')
+            POPUP.find('p').text('Erro')
+
+    _ajax('/signup/', signupComplete, method='POST', data=data)
+
 def initialRender():
     jQuery('.account-containers').hide()
     jQuery('#account-login-container').show()
@@ -141,6 +162,7 @@ def initialRender():
     login_email.val('')
 
     jQuery('#login-form').on('submit', sendLogin)
+    jQuery('#signup-form').on('submit', sendSignUp)
     jQuery('#new-character-button').on('click', chooseNewCharacter)
     jQuery('.new-character-choose-type-container').on('click', renderNewCharacter)
 
