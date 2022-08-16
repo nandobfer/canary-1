@@ -1,46 +1,19 @@
 from browser import document, ajax, html, bind, window, alert, timer
 
 jQuery = window.jQuery
-user = None
 POPUP = jQuery('#floating-popup')
 
 containers = '#home-container>div:not(.moonlight-wolf)'
 
 
-class User():
-    def __init__(self, data):
-        self.id = data['id']
-        self.username = data['user']
-        self.password = data['password']
-        self.name = data['name']
-        self.email = data['email']
-        self.type = data['member']
-
-    def updatePassword(self):
-        POPUP.fadeToggle()
-        POPUP.find('h1').text('Atualize sua senha')
-        POPUP.find('p').text(
-            'O sistema foi atualizado e sua senha precisa ser redefinida.')
-
-        pass_input = '<label for="input-new-password-temp">Nova senha</label><input type="password" id="input-new-password-temp" required>'
-        pass_input_confirmation = '<label for="input-new-password-temp-conf">Confirme a nova senha</label><input type="password" id="input-new-password-temp-conf" required>'
-        button = POPUP.find('button')
-        button.remove()
-        POPUP.append(pass_input)
-        POPUP.append(pass_input_confirmation)
-        POPUP.append(button)
-
-
 def toggleContainer(selection=['.main-container', '.body-toolbar'], mode=None):
     if mode == 'blur':
         for item in selection:
-            jQuery(item).css('opacity', '0.5')
-            # jQuery(item).css('filter', 'blur(2px)')
+            jQuery(item).css('filter', 'blur(2px)')
             jQuery(item).css('pointer-events', 'none')
     else:
         for item in selection:
-            jQuery(item).css('opacity', '1')
-            # jQuery(item).css('filter', 'blur(0)')
+            jQuery(item).css('filter', 'blur(0)')
             jQuery(item).css('pointer-events', 'auto')
 
 

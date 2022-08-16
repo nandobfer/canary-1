@@ -1,0 +1,138 @@
+.account-containers {
+    display: flex;
+    width: 100%;
+}
+
+#account-container {
+    height: 100%;
+}
+
+#account-login-container>form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 2vw;
+    padding-top: 5vh;
+    transition: 0.3s;
+}
+
+#account-login-container>form:focus-within {
+    background-color: var(--primary-color-light);
+}
+
+#account-login-container>hr {
+    height: 70%;
+    align-self: center;
+    background-color: white;
+    border-radius: 2vw;
+}
+
+#login-form>p {
+    color: var(--text-terciary);
+    font-weight: bold;
+}
+
+#account-login-container>form>input {
+    border-radius: 2vw;
+    height: 3.5vh;
+    width: 20vw;
+    outline: none;
+    padding: 0 1vw;
+}
+
+#account-login-container>form>label {
+    margin-right: 15vw;
+    margin-bottom: 0;
+}
+
+#account-login-container>form>button {
+    background-color: var(--primary-color);
+    color: white;
+    width: 8vw;
+    margin: 2vh;
+    padding: 0.5vw;
+    transition: 0.3s;
+    outline: 0.2vw solid white;
+}
+
+#account-login-container>form>button:hover {
+    background-color: white;
+    color: var(--primary-color);
+    width: 8vw;
+    outline: 0.2vw solid var(--primary-color);
+}
+
+/* PROFILE */
+
+#account-profile-container>div:not(.account-characters-container) {
+    flex: 0.8;
+}
+
+.account-characters-container {
+    flex: 0.2;
+    display: flex;
+    flex-direction: column;
+}
+
+.account-characters-container>button {
+    width: 80%;
+    margin-bottom: 2vh;
+}
+
+.account-characters-container>div {
+    margin: 0;
+    width: 90%;
+}
+
+.account-characters-container>div:hover {
+    cursor: pointer;
+    background-color: var(--primary-color-light);
+}
+
+.account-characters-container>hr {
+    width: 90%;
+    border: none;
+    border-top: 1px solid white;
+}
+
+.account-characters-container>hr:last-of-type {
+    display: none;
+}
+
+.new-character-container {
+    display: flex;
+}
+
+.new-character-choose-type-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 0.3vw solid white;
+    border-radius: 25%;
+    text-align: center;
+    padding: 1vw;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.new-character-choose-type-container:hover {
+    background-color: white;
+    border: 0.3vw solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.new-character-choose-type-container>img {
+    width: 80%;
+    height: 50%;
+    border-radius: 50%;
+    margin: 2vh 0;
+    outline: 0.2vw solid var(--primary-color);
+}
+
+.new-character-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}

@@ -4,4 +4,4 @@
 service mysql start
 #service php7.4-fpm start
 
-python3 site/server.py 5000
+python3 site/server.py

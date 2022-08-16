@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="/static/css/account.css">
     <script type="text/javascript" src="/static/brython/brython.js"></script>
     <script type="text/javascript" src="/static/brython/brython_stdlib.js"></script>
     <title>Sbop - Perfil</title>
@@ -76,7 +77,71 @@
         </div>
         <!-- CONTA CONTAINER -->
         <div class="main-container" id="account-container">
-            <h1>CONTA</h1>
+            <!-- LOGIN -->
+            <div id="account-login-container" class="account-containers">
+                <form id="login-form" action="javascript:void(0);">
+                    <h1>Login</h1>
+                    <label for="login-email">E-mail</label>
+                    <input type="text" id="login-email" class="login-input" autocomplete="off" required>
+            
+                    <label for="login-password">Senha</label>
+                    <input type="password" id="login-password" class="login-input" required>
+            
+                    <button id="login-button">Entrar</button>
+            
+                    <p></p>
+                </form>
+                <hr>
+                <form action="javascript:void(0);">
+                    <h1>Cadastrar</h1>
+                    <label for="signup-email">E-mail</label>
+                    <input type="email" id="signup-email" required>
+            
+                    <label for="signup-password">Senha</label>
+                    <input type="password" id="signup-password" required>
+            
+                    <button id="signup-button">Cadastrar</button>
+                </form>
+            </div>
+            <!-- PROFILE -->
+            <div id="account-profile-container" class="account-containers">
+                <div class="account-characters-container">
+                    <button id="new-character-button">Novo Personagem</button>
+                </div>
+                <hr>
+                <div class="new-character-container">
+                    <div id="choose-humanoid" class="new-character-choose-type-container" alt="Humanóide">
+                        <h1 alt="Humanóide">Humanóide</h1>
+                        <img src="static/images/humanoids.jpg" alt="Humanóide">
+                        <p alt="Humanóide">Escolha uma raça humanóide, domine uma ou duas classes e use equipamentos poderosos</p>
+                    </div>
+                    <div id="choose-monster" class="new-character-choose-type-container" alt="Monstro">
+                        <h1 alt="Monstro">Monstro</h1>
+                        <img src="static/images/monsters.jpg" alt="Monstro">
+                        <p alt="Monstro">Escolha um monstro, se alimente dos seus inimigos e evolua</p>
+                    </div>
+                    <div class="new-character-form">
+            
+                    </div>
+                </div>
+                <div class="character-container">
+                    <h1 id="character-name"></h1>
+                    <p>Classe: <span id="character-vocation"></span></p>
+                    <p>Cidade: <span id="character-city"></span></p>
+                    <p>Nível: <span id="character-level"></span></p>
+                    <p>Poder Mágico: <span id="character-magic_level"></span></p>
+                    <p>Punhos: <span id="character-fist"></span></p>
+                    <p>Maça: <span id="character-club"></span></p>
+                    <p>Espada: <span id="character-sword"></span></p>
+                    <p>Machado: <span id="character-axe"></span></p>
+                    <p>Distância: <span id="character-distance"></span></p>
+                    <p>Escudo: <span id="character-shield"></span></p>
+                    <p>Pescaria: <span id="character-fishing"></span></p>
+                </div>
+            </div>
+            <div id="account-signup-container" class="account-containers">
+            
+            </div>
         </div>
         <!-- DOWNLOAD CONTAINER -->
         <div class="main-container" id="download-container">
@@ -97,6 +162,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/python" src="/static/brython/toolbar.py"></script>
     <script type="text/python" src="/static/brython/home.py"></script>
+    <script type="text/python" src="/static/brython/account.py"></script>
 </footer>
 
 </html>

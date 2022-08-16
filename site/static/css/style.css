@@ -6,12 +6,13 @@
 
 :root {
     --primary-color: #0d1b49;
+    --primary-color-light: #192f76;
     --primary-color-dark: #0b1439;
     --secondary-color: #91a9b8;
     --line-color: #8D8D8D;
     --text-primary: #f5f5f5;
     --text-secondary: #8D8D8D;
-    --text-terciary: #6B6B6B;
+    --text-terciary: #ffc800;
     --input-background: #E4E4E4;
     --table-row-background: #DCDCDC;
 }
@@ -100,9 +101,10 @@ body {
 button {
     background-color: var(--primary-color);
     border-radius: 1.5vw;
-    border: none;
+    outline: 0.2vw solid white;
     color: white;
     font-weight: bold;
+    border: none;
     height: 4vh;
     margin-bottom: 0;
     cursor: pointer;
@@ -111,7 +113,9 @@ button {
 }
 
 button:hover {
-    background-color: #094a6f;
+    outline: 0.2vw solid var(--primary-color);
+        color: var(--primary-color);
+        background-color: white;
 }
 
 /* TOOLBAR */
@@ -188,10 +192,10 @@ button:hover {
     height: 20vh;
     justify-content: space-evenly;
     align-items: center;
-    background-color: var(--toolbar-color);
+    background-color: var(--primary-color);
     border-radius: 2vw;
     padding: 2vw;
-    filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(0 3px 10px rgba(0, 100, 255, 1))
 }
 
 #floating-popup button {
