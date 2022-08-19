@@ -96,6 +96,22 @@ class Mysql():
         self.connection.commit()
         cursor.close()
 
+    def newCharacter(self, data):
+        ''' Função utilizada para inserir novo membro no banco de dados.
+        DATA requer (ID, USUÁRIO, SENHA, NOME, ENDEREÇO, TIPO DE MEMBRO) '''
+
+        try:
+            sql = f"INSERT INTO players (id, name, account_id, vocation) VALUES ({data['id']}, '{data['name']}', {data['account_id']}, {data['vocation_id']})"
+            cursor = self.connection.cursor()
+            cursor.execute(sql)
+        except:
+            sql = f'INSERT INTO players (id, name, account_id, vocation) VALUES ({data["id"]}, "{data["name"]}", {data["account_id"]}, {data["vocation_id"]})'
+            cursor = self.connection.cursor()
+            cursor.execute(sql)
+
+        self.connection.commit()
+        cursor.close()
+
     def updateTable(self, table, id, column, value, id_column):
         command = f'Update {table} set {column} = "{value}" where {id_column} = {id}'
         cursor = self.connection.cursor()
@@ -124,6 +140,7 @@ class Connection():
 
     def getCharacters(self):
         try:
+            self.characters = []
             characters = session.database.fetchTable(
                 0, 'players', 'account_id', self.id)
             for item in characters:
@@ -134,19 +151,19 @@ class Connection():
                     'vocation': item[5],
                     'magic_level': item[15],
                     'city': item[20],
-                    'fist': item[47],
-                    'club': item[49],
-                    'sword': item[51],
-                    'axe': item[53],
-                    'distance': item[55],
-                    'shield': item[57],
-                    'fishing': item[59],
-                    'critical_chance': item[61],
-                    'critical_damage': item[63],
-                    'life_leech': item[65],
-                    'life_leech_chance': item[67],
-                    'mana_leech': item[69],
-                    'mana_leech_chance': item[71],
+                    'fist': item[48],
+                    'club': item[50],
+                    'sword': item[52],
+                    'axe': item[54],
+                    'distance': item[56],
+                    'shield': item[58],
+                    'fishing': item[60],
+                    'critical_chance': item[62],
+                    'critical_damage': item[64],
+                    'life_leech': item[66],
+                    'life_leech_chance': item[68],
+                    'mana_leech': item[70],
+                    'mana_leech_chance': item[72],
                 }
                 self.characters.append(character)
         except:
@@ -206,6 +223,7 @@ class Session():
 
                     connection = Connection(ip, data, self.database)
                     self.connections.append(connection)
+                    connection.getCharacters()
                     return connection
         except Exception as error:
             print(error)
@@ -270,6 +288,39 @@ def signup():
     else:
         return 'None'
 
+@app.route('/get_races/', methods=['POST'])
+def get_races():
+    races = session.database.fetchTable(0, 'races', 'type', request.form['type'])
+    return str(races)
+
+@app.route('/get_classes/', methods=['GET', 'POST'])
+def get_classes():
+    classes = session.database.fetchTable(0, 'classes')
+    return str(classes)
+
+@app.route('/new_character/', methods=['POST'])
+def new_character():
+    id = len(session.database.fetchTable(0, 'players')) + 1
+    data = {
+        'id': id,
+        'name': request.form['name'],
+        'vocation_id': request.form['vocation_id'],
+        'account_id': request.form['account_id'],
+        'race_id': request.form['race_id'],
+        'type': request.form['type'],
+        'sex': request.form['sex'],
+    }
+    print(data)
+    try:
+        session.database.newCharacter(data)
+        connection = session.getConnection(request.remote_addr)
+        connection.getCharacters()
+        return str(connection.characters[len(connection.characters)-1])
+    except Exception as error:
+        print(error)
+        return str(None)
+
+    
 
 def run():
 

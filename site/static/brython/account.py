@@ -36,6 +36,15 @@ class User():
         POPUP.append(pass_input_confirmation)
         POPUP.append(button)
 
+class Character():
+    def __init__(self):
+        self.name = None
+        self.type = None
+        self.vocation = None
+        self.vocation_id = None
+        self.race = None
+        self.race_id = None
+        self.sex = None
 
 def _ajax(url, onComplete, method='GET', data={}):
     req = ajax.Ajax()
@@ -55,6 +64,16 @@ def toggleContainer(selection=['.main-container', '.body-toolbar'], mode=None):
             jQuery(item).css('filter', 'blur(0)')
             jQuery(item).css('pointer-events', 'auto')
 
+def renderCharacterList():
+     for character in user.characters:
+        div = f'<div pos="{user.characters.index(character)}" id="char-{character["id"]}-container" class="account-characters"></div>'
+        jQuery('.account-characters-container').append(div)
+        p = f'<p pos="{user.characters.index(character)}" id="char-{character["id"]}">{character["name"]}</p>'
+        jQuery(f'#char-{character["id"]}-container').append(p)
+        jQuery('.account-characters-container').append('<hr>')
+
+        jQuery(
+            f'#char-{character["id"]}-container').on('click', renderCharacter)
 
 def login(req):
     data = (eval(req.text))
@@ -65,16 +84,7 @@ def login(req):
 
         user = User(data)
         if user.characters:
-
-            for character in user.characters:
-                div = f'<div pos="{user.characters.index(character)}" id="char-{character["id"]}-container" class="account-characters"></div>'
-                jQuery('.account-characters-container').append(div)
-                p = f'<p pos="{user.characters.index(character)}" id="char-{character["id"]}">{character["name"]}</p>'
-                jQuery(f'#char-{character["id"]}-container').append(p)
-                jQuery('.account-characters-container').append('<hr>')
-
-                jQuery(
-                    f'#char-{character["id"]}-container').on('click', renderCharacter)
+            renderCharacterList()
 
         jQuery('#account-login-container').fadeToggle(
             jQuery('#account-profile-container').fadeToggle)
@@ -106,18 +116,78 @@ def sendLogin(ev):
 def chooseNewCharacter(ev):
     if jQuery('.new-character-container').css('display') == 'none':
         jQuery('.character-container').fadeOut(jQuery('.new-character-container').fadeIn)
+    else:
+        jQuery('.new-character-form').fadeOut(jQuery('.new-character-choose-type-container').fadeIn)
 
 
 def renderNewCharacter(ev):
     type = ev.target.attrs['alt']
+    print(type)
     new_character_form = jQuery('.new-character-form')
     new_character_form.find('*').remove()
-    new_character_form.append(f'<h1>{type}</h1>')
+    new_character_form.append(f'<h1>Escolha sua raça</h1>')
+    
+    character = Character()
+    character.type = type
+    
+    def renderRaces(req):
+        data = eval(req.text)
+        for item in data:
+            button = html.BUTTON(f'{item[1]}', Id=f'race-{item[0]}', Class=f'race-{item[1]}')
+            new_character_form.append(button)
+            
+            def chooseRace(ev):
+                character.race = ev.target.attrs['class'].split('-')[1]
+                character.race_id = ev.target.attrs['id'].split('-')[1]
+                new_character_form.find('*').remove()
+                new_character_form.append(f'<h1>Escolha sua classe, {character.race}</h1>')
+                def renderClasses(req):
+                    data = eval(req.text)
+                    for item in data:
+                        button = html.BUTTON(f'{item[1]}', Id=f'class-{item[0]}', Class=f'class-{item[1]}')
+                        new_character_form.append(button)
+
+                        def chooseClass(ev):
+                            character.vocation = ev.target.attrs['class'].split('-')[1]
+                            character.vocation_id = ev.target.attrs['id'].split('-')[1]
+                            new_character_form.find('*').remove()
+                            new_character_form.append(f'<h1>Qual será o nome desse {character.race} {character.vocation}?</h1>')
+                            new_character_form.append(f'<input></input>')
+                            button = html.BUTTON('Criar Personagem')
+                            new_character_form.append(button)
+                            
+                            def submitNewCharacter(ev):
+                                character.name = new_character_form.find('input').val()
+                                data = vars(character)
+                                data.update({'account_id': user.id})
+                                
+                                def reloadCharacters(req):
+                                    response = eval(req.text)
+                                    print(response)
+                                    if response:
+                                        user.characters.append(response)
+                                        jQuery('.account-characters-container > *:not(button)').remove()
+                                        renderCharacterList()
+                                        renderCharacter(index = len(user.characters)-1)
+                                
+                                _ajax('/new_character/', reloadCharacters, method='POST', data=data)
+                            
+                            button.bind('click', submitNewCharacter)
+                            
+                        button.bind('click', chooseClass)
+                        
+                _ajax('/get_classes', renderClasses)
+                
+                
+            button.bind('click', chooseRace)
+    _ajax('/get_races/', renderRaces, method='POST', data={'type': type})
+
     jQuery('.new-character-choose-type-container').fadeOut(new_character_form.fadeIn)
 
 
-def renderCharacter(ev):
-    index = int(ev.target.attrs['pos'])
+def renderCharacter(ev = None, index = None):
+    if not index:
+        index = int(ev.target.attrs['pos'])
     character = user.characters[index]
     document['character-name'].text = character['name']
     document['character-vocation'].text = character['vocation']
