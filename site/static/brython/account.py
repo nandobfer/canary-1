@@ -45,6 +45,7 @@ class Character():
         self.race = None
         self.race_id = None
         self.sex = None
+        self.monster = False
 
 def _ajax(url, onComplete, method='GET', data={}):
     req = ajax.Ajax()
@@ -129,16 +130,27 @@ def renderNewCharacter(ev):
     
     character = Character()
     character.type = type
+    if str(type) == '1':
+        character.monster = True
     
     def renderRaces(req):
         data = eval(req.text)
         for item in data:
-            button = html.BUTTON(f'{item[1]}', Id=f'race-{item[0]}', Class=f'race-{item[1]}')
+            if character.monster:
+                button = html.BUTTON(f'{item["race"][1]}', Id=f'race-{item["race"][0]}', Class=f'race-{item["race"][1]}')
+                jQuery(button).attr('monster', item['class'][1])
+                jQuery(button).attr('monster_id', item['class'][0])
+            else:
+                button = html.BUTTON(f'{item[1]}', Id=f'race-{item[0]}', Class=f'race-{item[1]}')
             new_character_form.append(button)
             
             def chooseRace(ev):
                 character.race = ev.target.attrs['class'].split('-')[1]
                 character.race_id = ev.target.attrs['id'].split('-')[1]
+                if character.monster:
+                    character.vocation = ev.target.attrs['monster']
+                    character.vocation_id = ev.target.attrs['monster_id']
+                    
                 new_character_form.find('*').remove()
                 new_character_form.append(f'<h1>Escolha sua classe, {character.race}</h1>')
                 def renderClasses(req):
@@ -175,8 +187,33 @@ def renderNewCharacter(ev):
                             button.bind('click', submitNewCharacter)
                             
                         button.bind('click', chooseClass)
+                if not character.monster:
+                    _ajax('/get_classes', renderClasses)
+                else:
+                    new_character_form.find('*').remove()
+                    new_character_form.append(f'<h1>Qual será o nome desse {character.vocation}?</h1>')
+                    new_character_form.append(f'<input></input>')
+                    button = html.BUTTON('Criar Personagem')
+                    new_character_form.append(button)
+                    
+                    def submitNewCharacter(ev):
+                        character.name = new_character_form.find('input').val()
+                        data = vars(character)
+                        data.update({'account_id': user.id})
                         
-                _ajax('/get_classes', renderClasses)
+                        def reloadCharacters(req):
+                            response = eval(req.text)
+                            print(response)
+                            if response:
+                                user.characters.append(response)
+                                jQuery('.account-characters-container > *:not(button)').remove()
+                                renderCharacterList()
+                                renderCharacter(index = len(user.characters)-1)
+                        
+                        _ajax('/new_character/', reloadCharacters, method='POST', data=data)
+                    
+                    button.bind('click', submitNewCharacter)
+
                 
                 
             button.bind('click', chooseRace)

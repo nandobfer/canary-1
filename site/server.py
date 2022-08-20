@@ -314,7 +314,19 @@ def signup():
 @app.route('/get_races/', methods=['POST'])
 def get_races():
     races = session.database.fetchTable(0, 'races', 'type', request.form['type'])
-    return str(races)
+    if str(request.form['type']) == '0':
+        return str(races)
+    else:
+        monsters = []
+        for race in races:
+            char_class = session.database.fetchTable(1, 'classes', 'id', race[4])[0]
+            data = {
+                'race': race,
+                'class': char_class
+            }
+            monsters.append(data)
+        print(monsters)
+        return str(monsters)
 
 @app.route('/get_classes/', methods=['GET', 'POST'])
 def get_classes():
