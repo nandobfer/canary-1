@@ -190,8 +190,15 @@ def renderCharacter(ev = None, index = None):
         index = int(ev.target.attrs['pos'])
     character = user.characters[index]
     document['character-name'].text = character['name']
+    document['character-race'].text = character['race']
     document['character-vocation'].text = character['vocation']
     document['character-city'].text = character['city']
+    if character['guild']:
+        document['character-guild'].text = character['guild']
+        document['character-guild-position'].text = character['guild_position']
+    else:
+        document['character-guild'].text = 'Nenhuma'
+        document['character-guild-position'].text = 'Nenhum'
     document['character-level'].text = character['level']
     document['character-magic_level'].text = character['magic_level']
     document['character-fist'].text = character['fist']

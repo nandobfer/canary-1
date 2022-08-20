@@ -1,3 +1,14 @@
+function Player:getRace()
+    local race
+    local player = self:getPlayer()
+    local resultId = db.storeQuery('SELECT race FROM players WHERE name = ' .. db.escapeString(player:getName()))
+    if resultId then
+        race = result.getNumber(resultId, "race")
+    end
+    result.free(resultId)
+    return race
+end
+
 function raceStartUp(player)
     local races = {
         [0] = humanStartUp,
@@ -6,30 +17,10 @@ function raceStartUp(player)
         [3] = orcStartUp,
         [4] = dwarfStartUp,
     }
-    local index = player:getStorageValue(Storage_.race)
-    if index < 0 then
-        player:setStorageValue(Storage_.race, 0)
-        index = 0
-    end
+    local index = player:getRace()
     races[index](player)
 end
 
-function Player:getRace()
-    local player = self:getPlayer()
-    if player:getStorageValue(Storage_.race) == 0 then
-        return 0
-    elseif player:getStorageValue(Storage_.race) == 1 then
-        return 1
-    elseif player:getStorageValue(Storage_.race) == 2 then
-        return 2
-    elseif player:getStorageValue(Storage_.race) == 3 then
-        return 3
-    elseif player:getStorageValue(Storage_.race) == 4 then
-        return 4
-    else
-        return false
-    end
-end
 
 function Player:setRaceSkin()
     player = self:getPlayer()
@@ -129,9 +120,6 @@ end
 ----------- ELF -----------
 
 function elfStartUp(player)
-    if player:getStorageValue(Storage_.race) ~= 1 then
-        return false
-    end
     -- Elf LookType
     player:setRaceSkin()
 
@@ -145,9 +133,6 @@ end
 ----------- GOBLIN -----------
 
 function goblinStartUp(player)
-    if player:getStorageValue(Storage_.race) ~= 2 then
-        return false
-    end
 
     -- Goblin LookType
     player:setRaceSkin()
@@ -156,9 +141,6 @@ end
 ----------- ORC
 
 function orcStartUp(player)
-    if player:getStorageValue(Storage_.race) ~= 3 then
-        return false
-    end
 
     -- Orc LookType
     player:setRaceSkin()
@@ -167,9 +149,6 @@ end
 ----------- DWARF
 
 function dwarfStartUp(player)
-    if player:getStorageValue(Storage_.race) ~= 4 then
-        return false
-    end
 
     -- Dwarf LookType
     player:setRaceSkin()

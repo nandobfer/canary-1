@@ -136,3 +136,13 @@
     display: flex;
     flex-direction: column;
 }
+
+.character-container {
+    display: flex;
+}
+
+.character-container > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}

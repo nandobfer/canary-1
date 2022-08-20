@@ -101,11 +101,11 @@ class Mysql():
         DATA requer (ID, USUÁRIO, SENHA, NOME, ENDEREÇO, TIPO DE MEMBRO) '''
 
         try:
-            sql = f"INSERT INTO players (id, name, account_id, vocation) VALUES ({data['id']}, '{data['name']}', {data['account_id']}, {data['vocation_id']})"
+            sql = f"INSERT INTO players (id, name, account_id, vocation, race) VALUES ({data['id']}, '{data['name']}', {data['account_id']}, {data['vocation_id']}, {data['race']})"
             cursor = self.connection.cursor()
             cursor.execute(sql)
         except:
-            sql = f'INSERT INTO players (id, name, account_id, vocation) VALUES ({data["id"]}, "{data["name"]}", {data["account_id"]}, {data["vocation_id"]})'
+            sql = f'INSERT INTO players (id, name, account_id, vocation, race) VALUES ({data["id"]}, "{data["name"]}", {data["account_id"]}, {data["vocation_id"]}, {data["race"]})'
             cursor = self.connection.cursor()
             cursor.execute(sql)
 
@@ -122,17 +122,23 @@ class Mysql():
 
 
 class Connection():
-    def __init__(self, ip, data, database):
+    def __init__(self, ip, id):
         self.ip = ip
+        self.id = id
+        
+        self.buildPlayer()
+        self.getCharacters()
+        self.expira = datetime.now() + timedelta(minutes=TIMELIMIT)
+
+    def buildPlayer(self):
+        data = session.database.fetchTable(1, 'accounts', 'id', self.id)[0]
+
         self.id = data[0]
         self.name = data[1]
         self.password = data[2]
         self.user = data[3]
         self.member = data[5]
         self.characters = []
-
-        self.getCharacters()
-        self.expira = datetime.now() + timedelta(minutes=TIMELIMIT)
 
     def isExpired(self):
         if not datetime.now() < self.expira:
@@ -144,13 +150,25 @@ class Connection():
             characters = session.database.fetchTable(
                 0, 'players', 'account_id', self.id)
             for item in characters:
+                try:
+                    guild_db = session.database.fetchTable(1, 'guild_membership', 'player_id', item[0])[0]
+                    guild_id = guild_db[1]
+                    guild = session.database.fetchTable(1, 'guilds', 'id', guild_id)[0][1]
+                    guild_position_id = guild_db[2]
+                    guild_position = session.database.fetchTable(1, 'guild_ranks', 'id', guild_position_id)[0][2]
+                except:
+                    guild = ''
+                    guild_position = ''
+
                 character = {
                     'id': item[0],
                     'name': item[1],
                     'level': item[4],
-                    'vocation': item[5],
+                    'vocation_id': item[5],
+                    'vocation': session.database.fetchTable(1, 'classes', 'id', item[5])[0][1],
                     'magic_level': item[15],
-                    'city': item[20],
+                    'city_id': item[20],
+                    'city': session.database.fetchTable(1, 'towns', 'id', item[20])[0][1],
                     'fist': item[48],
                     'club': item[50],
                     'sword': item[52],
@@ -164,6 +182,10 @@ class Connection():
                     'life_leech_chance': item[68],
                     'mana_leech': item[70],
                     'mana_leech_chance': item[72],
+                    'race_id': item[92],
+                    'race': session.database.fetchTable(1, 'races', 'id', item[98])[0][1],
+                    'guild': guild,
+                    'guild_position': guild_position,
                 }
                 self.characters.append(character)
         except:
@@ -221,8 +243,9 @@ class Session():
                     if is_logged and is_logged.id == id:
                         self.connections.remove(is_logged)
 
-                    connection = Connection(ip, data, self.database)
+                    connection = Connection(ip, id)
                     self.connections.append(connection)
+                    connection.buildPlayer()
                     connection.getCharacters()
                     return connection
         except Exception as error:
@@ -309,6 +332,7 @@ def new_character():
         'race_id': request.form['race_id'],
         'type': request.form['type'],
         'sex': request.form['sex'],
+        'race': request.form['race_id'],
     }
     print(data)
     try:
